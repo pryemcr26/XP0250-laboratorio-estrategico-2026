@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laboratorio Estratégico XP0250</title>
+  <style>
+    :root{
+      --ucr-blue:#005da4;
+      --ucr-cyan:#00b8e4;
+      --ink:#1f2937;
+      --muted:#667085;
+      --line:#d9e2e8;
+      --bg:#f6f8fa;
+      --panel:#ffffff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:20px 16px 48px;
+    }
+    .hero{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      margin-bottom:22px;
+    }
+    .hero img{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+    .hero-copy{
+      padding:18px 20px 20px;
+    }
+    .hero-copy h1{
+      margin:0 0 7px;
+      color:var(--ucr-blue);
+      font-size:28px;
+    }
+    .hero-copy p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.5;
+    }
+    .intro{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px;
+      margin-bottom:18px;
+    }
+    h2{
+      font-size:20px;
+      margin:0 0 10px;
+      color:var(--ucr-blue);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:16px;
+    }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:18px;
+    }
+    .tag{
+      display:inline-block;
+      background:#e9f8fc;
+      color:var(--ucr-blue);
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:19px;
+    }
+    .card p{
+      color:var(--muted);
+      line-height:1.45;
+      min-height:62px;
+    }
+    .btn{
+      display:inline-block;
+      text-decoration:none;
+      background:var(--ucr-blue);
+      color:#fff;
+      padding:10px 14px;
+      border-radius:9px;
+      font-weight:700;
+    }
+    .btn:hover{background:#004b84}
+    .coming{opacity:.62}
+    footer{
+      margin-top:24px;
+      color:var(--muted);
+      font-size:12px;
+      text-align:center;
+    }
+    @media(max-width:600px){
+      .wrap{padding:10px 10px 36px}
+      .hero-copy h1{font-size:23px}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <img src="portada-xp0250.png" alt="Portada oficial del curso XP0250 Planificación Estratégica">
+      <div class="hero-copy">
+        <h1>Laboratorio Estratégico XP0250</h1>
+        <p>Simuladores y herramientas didácticas para explorar decisiones, escenarios, probabilidades, trade-offs y sensibilidad.</p>
+      </div>
+    </section>
+
+    <section class="intro">
+      <h2>Aprender estrategia tomando decisiones</h2>
+      <p>
+        Este laboratorio complementa las actividades del curso con simuladores interactivos.
+        Modifique supuestos, compare alternativas y observe cómo cambia la recomendación estratégica.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <span class="tag">Decisión bajo incertidumbre</span>
+        <h3>Caso Dos Pinos</h3>
+        <p>Explore VME, escenarios, árboles de decisión, inversiones, flujos y umbrales de sensibilidad.</p>
+        <a class="btn" href="simuladores/dos-pinos/">Abrir simulador</a>
+      </article>
+
+      <article class="card coming">
+        <span class="tag">Próximamente</span>
+        <h3>Nuevos simuladores</h3>
+        <p>Este espacio irá incorporando nuevas herramientas y casos del curso XP0250.</p>
+      </article>
+    </section>
+
+    <footer>
+      XP0250 · Planificación Estratégica · Laboratorio Estratégico 2026
+    </footer>
+  </main>
+</body>
+</html>
