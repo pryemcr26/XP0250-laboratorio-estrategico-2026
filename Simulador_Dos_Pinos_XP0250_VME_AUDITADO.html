@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de Decisiones · Caso Dos Pinos · XP0250</title>
+<style>
+:root{
+  --bg:#f6f8f7; --panel:#ffffff; --ink:#17201b; --muted:#657068; --line:#d9e1dc;
+  --green:#1b5e20; --green2:#2e7d32; --soft:#eaf4ec; --warn:#fff7e6; --danger:#fff0f0;
+  --a:#7b5aa6; --b:#2f7d5b; --c:#3f6ea5;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:18px}
+h1{font-size:24px;margin:0 0 5px;color:var(--green)}
+h2{font-size:18px;margin:0 0 10px}
+h3{font-size:15px;margin:0 0 8px}
+p{margin:5px 0 10px;line-height:1.4}
+.small{font-size:12px;color:var(--muted)}
+.topnote{background:var(--soft);border:1px solid #cfe2d2;border-radius:10px;padding:10px 12px;margin:12px 0}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+button{border:0;border-radius:8px;padding:10px 13px;font-weight:700;cursor:pointer}
+button.primary{background:var(--green);color:white}
+button.secondary{background:#e9eeeb;color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px;min-width:0}
+.card.a{border-top:5px solid var(--a)} .card.b{border-top:5px solid var(--b)} .card.c{border-top:5px solid var(--c)}
+label{display:block;font-size:12px;font-weight:700;margin:7px 0 3px}
+input[type=number]{width:100%;padding:8px;border:1px solid #cbd5ce;border-radius:7px;font-size:15px;background:white}
+.scenario{display:grid;grid-template-columns:1.2fr .75fr .85fr;gap:6px;align-items:end;margin-bottom:6px}
+.scenario div:first-child{font-size:12px;font-weight:700;padding-bottom:8px}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.metric{background:#f5f7f6;border-radius:8px;padding:8px;text-align:center}
+.metric b{display:block;font-size:17px}
+.metric span{font-size:11px;color:var(--muted)}
+.status{font-size:12px;margin-top:6px;font-weight:700}
+.good{color:#17612e}.bad{color:#9a2f2f}.warn{color:#9a6b00}
+.summary{display:grid;grid-template-columns:1.2fr .8fr;gap:12px;margin-top:12px}
+.rank{width:100%;border-collapse:collapse;font-size:13px}
+.rank th,.rank td{padding:8px;border-bottom:1px solid var(--line);text-align:right}
+.rank th:first-child,.rank td:first-child{text-align:left}
+.bestrow{background:#edf7ef;font-weight:700}
+.tree-wrap{overflow-x:auto}
+svg{width:100%;min-width:720px;height:auto;background:#fbfcfb;border:1px solid var(--line);border-radius:10px}
+.node-decision{fill:#fff;stroke:#333;stroke-width:2}
+.node-chance{fill:#fff;stroke:#555;stroke-width:2}
+.branch{stroke:#6b756e;stroke-width:2;fill:none}
+.branch.best{stroke:var(--green);stroke-width:4}
+.lbl{font-size:12px;fill:#202620}
+.money{font-size:12px;font-weight:700}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin:8px 0}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px}
+.sens-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.callout{background:#f7f9f8;border-left:4px solid var(--green);padding:10px 12px;border-radius:6px}
+footer{margin-top:16px;font-size:11px;color:var(--muted)}
+
+.threshold-box{background:#fbfcfb;border:1px solid var(--line);border-radius:10px;padding:11px;margin-top:9px}
+.threshold-box code{font-family:Consolas,Monaco,monospace;font-size:12px;background:#eef2ef;padding:2px 5px;border-radius:4px}
+.formula{font-family:Consolas,Monaco,monospace;font-size:12px;line-height:1.55;background:#f3f6f4;border-radius:8px;padding:9px;overflow-x:auto}
+.threshold-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.threshold-actions button{padding:8px 10px;font-size:12px}
+.step-list{margin:6px 0 0;padding-left:19px;font-size:12px;line-height:1.45}
+.threshold-title{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
+.badge{display:inline-block;border-radius:999px;padding:3px 8px;background:var(--soft);font-size:11px;font-weight:700;color:var(--green)}
+
+@media(max-width:850px){.grid,.summary,.sens-grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){main{padding:10px}.scenario{grid-template-columns:1fr 1fr}.scenario div:first-child{grid-column:1/-1;padding-bottom:0}.metrics{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Simulador de decisiones · Caso Dos Pinos</h1>
+  <p><b>XP0250 Planificación Estratégica</b> · Proyecto A “Verde” · Proyecto B “Pulso” · Proyecto C “Istmo”</p>
+  <div class="topnote">
+    <b>Convención del caso:</b> VME = Σ(probabilidad × flujo acumulado a 5 años) − inversión inicial.
+    Los montos y probabilidades son <b>estimaciones didácticas</b> del caso, no cifras internas de Dos Pinos.
+  </div>
+
+  <div class="topnote">
+    <b>Regla de probabilidades del simulador auditado:</b> en A y B usted modifica la probabilidad del escenario alto y del escenario bajo/fallido; la probabilidad intermedia se calcula automáticamente como <b>1 − p(alta) − p(baja/fallida)</b>. Así el VME nunca se calcula con probabilidades que no sumen 100 %.
+  </div>
+
+  <div class="toolbar">
+    <button class="primary" id="resetBtn">Restablecer datos del caso</button>
+    <button class="secondary" id="verifyBtn">Verificar cálculo del VME</button>
+  </div>
+
+  <section class="grid">
+    <article class="card a">
+      <h2>A · Verde</h2>
+      <p class="small">Línea propia de bebidas vegetales.</p>
+      <label>Inversión inicial (US$ MM)</label>
+      <input id="aInv" type="number" step="0.1">
+      <div class="scenario">
+        <div>Adopción alta</div><div><label>Prob.</label><input id="aP1" type="number" step="0.01" min="0" max="1"></div><div><label>Flujo</label><input id="aF1" type="number" step="0.1"></div>
+      </div>
+      <div class="scenario">
+        <div>Adopción moderada</div><div><label>Prob. residual</label><input id="aP2" type="number" step="0.01" min="0" max="1" disabled></div><div><label>Flujo</label><input id="aF2" type="number" step="0.1"></div>
+      </div>
+      <div class="scenario">
+        <div>Adopción baja</div><div><label>Prob.</label><input id="aP3" type="number" step="0.01" min="0" max="1"></div><div><label>Flujo</label><input id="aF3" type="number" step="0.1"></div>
+      </div>
+      <div class="metrics"><div class="metric"><b id="aVme">—</b><span>VME</span></div><div class="metric"><b id="aBest">—</b><span>Mejor neto</span></div><div class="metric"><b id="aWorst">—</b><span>Peor neto</span></div><div class="metric"><b id="aPSum">—</b><span>Σ prob.</span></div></div>
+      <div class="status" id="aStatus"></div><div class="formula" id="aAudit">—</div>
+    </article>
+
+    <article class="card b">
+      <h2>B · Pulso</h2>
+      <p class="small">Analítica avanzada + canal B2B.</p>
+      <label>Inversión inicial (US$ MM)</label>
+      <input id="bInv" type="number" step="0.1">
+      <div class="scenario">
+        <div>Adopción alta</div><div><label>Prob.</label><input id="bP1" type="number" step="0.01" min="0" max="1"></div><div><label>Flujo</label><input id="bF1" type="number" step="0.1"></div>
+      </div>
+      <div class="scenario">
+        <div>Adopción parcial</div><div><label>Prob. residual</label><input id="bP2" type="number" step="0.01" min="0" max="1" disabled></div><div><label>Flujo</label><input id="bF2" type="number" step="0.1"></div>
+      </div>
+      <div class="scenario">
+        <div>Adopción fallida</div><div><label>Prob.</label><input id="bP3" type="number" step="0.01" min="0" max="1"></div><div><label>Flujo</label><input id="bF3" type="number" step="0.1"></div>
+      </div>
+      <div class="metrics"><div class="metric"><b id="bVme">—</b><span>VME</span></div><div class="metric"><b id="bBest">—</b><span>Mejor neto</span></div><div class="metric"><b id="bWorst">—</b><span>Peor neto</span></div><div class="metric"><b id="bPSum">—</b><span>Σ prob.</span></div></div>
+      <div class="status" id="bStatus"></div><div class="formula" id="bAudit">—</div>
+    </article>
+
+    <article class="card c">
+      <h2>C · Istmo</h2>
+      <p class="small">Nuevo mercado de exportación con compuerta regulatoria.</p>
+      <label>Inversión inicial (US$ MM)</label>
+      <input id="cInv" type="number" step="0.1">
+      <label>Probabilidad de habilitación regulatoria</label>
+      <input id="cReg" type="number" step="0.01" min="0" max="1">
+      <label>Si se habilita: probabilidad de demanda alta</label>
+      <input id="cHigh" type="number" step="0.01" min="0" max="1">
+      <div class="scenario">
+        <div>Habilitada + alta</div><div><label>Prob. conjunta</label><input id="cJoint1" type="number" disabled></div><div><label>Flujo</label><input id="cF1" type="number" step="0.1"></div>
+      </div>
+      <div class="scenario">
+        <div>Habilitada + moderada</div><div><label>Prob. conjunta</label><input id="cJoint2" type="number" disabled></div><div><label>Flujo</label><input id="cF2" type="number" step="0.1"></div>
+      </div>
+      <div class="scenario">
+        <div>Denegada / inviable</div><div><label>Prob. conjunta</label><input id="cJoint3" type="number" disabled></div><div><label>Flujo</label><input id="cF3" type="number" step="0.1"></div>
+      </div>
+      <div class="metrics"><div class="metric"><b id="cVme">—</b><span>VME</span></div><div class="metric"><b id="cBest">—</b><span>Mejor neto</span></div><div class="metric"><b id="cWorst">—</b><span>Peor neto</span></div><div class="metric"><b id="cPSum">1.00</b><span>Σ prob.</span></div></div>
+      <div class="status" id="cStatus"></div><div class="formula" id="cAudit">—</div>
+    </article>
+  </section>
+
+  <section class="summary">
+    <article class="card">
+      <h2>Ranking y recomendación</h2>
+      <table class="rank">
+        <thead><tr><th>Proyecto</th><th>VME</th><th>Mejor neto</th><th>Peor neto</th></tr></thead>
+        <tbody id="rankBody"></tbody>
+      </table>
+      <div class="callout" style="margin-top:10px">
+        <b id="decisionText">—</b>
+        <div class="small" id="decisionReason"></div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="threshold-title"><h2>Umbrales de decisión</h2><span class="badge">sensibilidad</span></div>
+      <p class="small"><b>Umbral</b> = valor de una probabilidad en el que dos alternativas tienen el mismo VME. Al cruzarlo, cambia el ranking y puede cambiar la decisión.</p>
+      <div class="sens-grid">
+        <div class="metric"><b id="aThreshold">—</b><span>P. adopción alta de A para igualar/superar al mejor rival</span></div>
+        <div class="metric"><b id="bThreshold">—</b><span>P. adopción alta de B para igualar/superar al mejor rival</span></div>
+        <div class="metric"><b id="cThreshold">—</b><span>P. habilitación de C para igualar/superar al mejor rival</span></div>
+        <div class="metric"><b id="marginToSwitch">—</b><span>Distancia del supuesto actual al umbral más cercano</span></div>
+      </div>
+      <p class="small" id="sensNote"></p>
+    </article>
+  </section>
+
+  <section class="card" style="margin-top:12px">
+    <div class="threshold-title">
+      <h2>Cómo se calcula un umbral</h2>
+      <span class="badge">paso a paso</span>
+    </div>
+    <div class="grid">
+      <div class="threshold-box">
+        <h3>A · Verde</h3>
+        <p class="small">Se mantiene fija la probabilidad de adopción baja. La probabilidad moderada es residual: 1 − p(alta) − p(baja).</p>
+        <div class="formula" id="aFormula">—</div>
+        <ol class="step-list" id="aSteps"></ol>
+        <div class="threshold-actions">
+          <button type="button" class="secondary" id="applyAThreshold">Llevar A al umbral</button>
+        </div>
+      </div>
+
+      <div class="threshold-box">
+        <h3>B · Pulso</h3>
+        <p class="small">Se mantiene fija la probabilidad de adopción fallida. La probabilidad parcial es residual: 1 − p(alta) − p(fallida).</p>
+        <div class="formula" id="bFormula">—</div>
+        <ol class="step-list" id="bSteps"></ol>
+        <div class="threshold-actions">
+          <button type="button" class="secondary" id="applyBThreshold">Llevar B al umbral</button>
+        </div>
+      </div>
+
+      <div class="threshold-box">
+        <h3>C · Istmo</h3>
+        <p class="small">Se modifica la probabilidad de habilitación regulatoria. La mezcla de demanda alta/moderada condicionada a la aprobación se mantiene.</p>
+        <div class="formula" id="cFormula">—</div>
+        <ol class="step-list" id="cSteps"></ol>
+        <div class="threshold-actions">
+          <button type="button" class="secondary" id="applyCThreshold">Llevar C al umbral</button>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:10px">
+      <b>Interpretación docente:</b> el umbral no dice cuál probabilidad es “verdadera”. Dice <i>qué tan distinta tendría que ser</i> la estimación para que cambie la recomendación. Cuanto más cerca esté el supuesto actual del umbral, más valiosa puede ser la información adicional.
+    </div>
+  </section>
+
+  <section class="card" style="margin-top:12px">
+    <h2>Árboles de decisión</h2>
+    <div class="legend"><span><span class="dot" style="background:var(--a)"></span>A Verde</span><span><span class="dot" style="background:var(--b)"></span>B Pulso</span><span><span class="dot" style="background:var(--c)"></span>C Istmo</span></div>
+    <div class="tree-wrap"><svg id="treeSvg" viewBox="0 0 1100 570" role="img" aria-label="Árbol de decisión comparativo de los tres proyectos"></svg></div>
+    <p class="small">Los valores terminales muestran el resultado neto de cada escenario: flujo menos inversión. La rama de mayor VME se resalta.</p>
+  </section>
+
+  <section class="card" style="margin-top:12px">
+    <h2>Lectura para la toma de decisiones</h2>
+    <div id="teachingText" class="callout"></div>
+  </section>
+
+  <footer>Simulador didáctico basado en el caso “Dos Pinos: decidir con datos”, Fascículo 3 · XP0250 Planificación Estratégica.</footer>
+</main>
+
+<script>
+(function(){
+const D={
+ a:{inv:30,p:[.25,.45,.30],f:[84,40,10]},
+ b:{inv:12,p:[.40,.40,.20],f:[45,25,5]},
+ c:{inv:22,reg:.70,high:.50,f:[60,36,4]}
+};
+const $=id=>document.getElementById(id);
+const n=id=>{const x=parseFloat($(id).value); return Number.isFinite(x)?x:0};
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const fmt=x=>Number.isFinite(x)?x.toLocaleString('es-CR',{minimumFractionDigits:1,maximumFractionDigits:2}):'—';
+const pct=x=>Number.isFinite(x)?(x*100).toLocaleString('es-CR',{maximumFractionDigits:1})+' %':'—';
+
+function setDefaults(){
+ $('aInv').value=D.a.inv; $('aP1').value=D.a.p[0]; $('aP3').value=D.a.p[2]; D.a.f.forEach((v,i)=>$('aF'+(i+1)).value=v);
+ $('bInv').value=D.b.inv; $('bP1').value=D.b.p[0]; $('bP3').value=D.b.p[2]; D.b.f.forEach((v,i)=>$('bF'+(i+1)).value=v);
+ $('cInv').value=D.c.inv; $('cReg').value=D.c.reg; $('cHigh').value=D.c.high; D.c.f.forEach((v,i)=>$('cF'+(i+1)).value=v);
+ recalc();
+}
+function projectAB(prefix,name){
+ const inv=n(prefix+'Inv');
+ const pHigh=clamp(n(prefix+'P1'),0,1);
+ const pLow=clamp(n(prefix+'P3'),0,1);
+ const pMid=1-pHigh-pLow;
+ const fs=[1,2,3].map(i=>n(prefix+'F'+i));
+ const valid=pMid>=-1e-9;
+ const mid=Math.max(0,pMid);
+ $(prefix+'P2').value=valid?mid.toFixed(4):'0.0000';
+ const ps=[pHigh,mid,pLow];
+ const psum=ps.reduce((a,b)=>a+b,0);
+
+ const st=$(prefix+'Status');
+ if(!valid){
+   st.className='status bad';
+   st.textContent='Probabilidades inválidas: p(alta) + p(baja/fallida) no puede superar 100 %.';
+   $(prefix+'Vme').textContent='—';
+   $(prefix+'Best').textContent='—';
+   $(prefix+'Worst').textContent='—';
+   $(prefix+'PSum').textContent='—';
+   $(prefix+'Audit').textContent='Corrija las probabilidades antes de calcular el VME.';
+   return {name,inv,ps,fs,psum:NaN,vme:NaN,nets:fs.map(f=>f-inv),valid:false};
+ }
+
+ const weighted=ps.reduce((s,p,i)=>s+p*fs[i],0);
+ const vme=weighted-inv;
+ const nets=fs.map(f=>f-inv);
+ const vmeByNet=ps.reduce((s,p,i)=>s+p*nets[i],0);
+
+ $(prefix+'Vme').textContent=fmt(vme);
+ $(prefix+'Best').textContent=fmt(Math.max(...nets));
+ $(prefix+'Worst').textContent=fmt(Math.min(...nets));
+ $(prefix+'PSum').textContent=psum.toFixed(2);
+ st.className='status good';
+ st.textContent='Probabilidades válidas: suman 1,00.';
+ $(prefix+'Audit').textContent=
+   'VME = ('+ps[0].toFixed(2)+'×'+fmt(fs[0])+') + ('+ps[1].toFixed(2)+'×'+fmt(fs[1])+') + ('+ps[2].toFixed(2)+'×'+fmt(fs[2])+') − '+fmt(inv)+' = '+fmt(vme)+
+   ' | Comprobación por netos = '+fmt(vmeByNet);
+ return {name,inv,ps,fs,psum,vme,nets,valid:true};
+}
+function projectC(){
+ const inv=n('cInv'), reg=clamp(n('cReg'),0,1), high=clamp(n('cHigh'),0,1), fs=[n('cF1'),n('cF2'),n('cF3')];
+ const ps=[reg*high,reg*(1-high),1-reg];
+ $('cJoint1').value=ps[0].toFixed(4); $('cJoint2').value=ps[1].toFixed(4); $('cJoint3').value=ps[2].toFixed(4);
+ const weighted=ps.reduce((s,p,i)=>s+p*fs[i],0);
+ const vme=weighted-inv;
+ const nets=fs.map(f=>f-inv);
+ const vmeByNet=ps.reduce((s,p,i)=>s+p*nets[i],0);
+ $('cVme').textContent=fmt(vme); $('cBest').textContent=fmt(Math.max(...nets)); $('cWorst').textContent=fmt(Math.min(...nets));
+ $('cPSum').textContent=ps.reduce((a,b)=>a+b,0).toFixed(2);
+ const st=$('cStatus'); st.className='status good'; st.textContent='Árbol secuencial válido: habilitación → demanda.';
+ $('cAudit').textContent=
+   'VME = ('+ps[0].toFixed(2)+'×'+fmt(fs[0])+') + ('+ps[1].toFixed(2)+'×'+fmt(fs[1])+') + ('+ps[2].toFixed(2)+'×'+fmt(fs[2])+') − '+fmt(inv)+' = '+fmt(vme)+
+   ' | Comprobación por netos = '+fmt(vmeByNet);
+ return {name:'C · Istmo',inv,reg,high,ps,fs,psum:1,vme,nets,valid:true};
+}
+function thresholdAB(P,target){
+ const low=P.ps[2], fH=P.fs[0], fM=P.fs[1], fL=P.fs[2], inv=P.inv;
+ const remaining=1-low;
+ const denom=fH-fM;
+ if(Math.abs(denom)<1e-9)return NaN;
+ // target = p*fH + (1-low-p)*fM + low*fL - inv
+ return (target + inv - remaining*fM - low*fL)/denom;
+}
+function thresholdC(C,target){
+ const h=C.high, fH=C.fs[0], fM=C.fs[1], fD=C.fs[2], inv=C.inv;
+ const approvedEV=h*fH+(1-h)*fM;
+ const denom=approvedEV-fD;
+ if(Math.abs(denom)<1e-9)return NaN;
+ // target = r*approvedEV + (1-r)*fD - inv
+ return (target+inv-fD)/denom;
+}
+function renderRank(list){
+ const valid=list.filter(x=>x.valid!==false && Number.isFinite(x.vme));
+ const invalid=list.filter(x=>x.valid===false || !Number.isFinite(x.vme));
+ const sorted=[...valid].sort((x,y)=>y.vme-x.vme);
+ const all=[...sorted,...invalid];
+ $('rankBody').innerHTML=all.map((x,i)=>`<tr class="${i===0&&sorted.length?'bestrow':''}"><td>${x.name}</td><td>${Number.isFinite(x.vme)?fmt(x.vme):'—'}</td><td>${fmt(Math.max(...x.nets))}</td><td>${fmt(Math.min(...x.nets))}</td></tr>`).join('');
+ if(sorted.length<3){
+   $('decisionText').textContent='No se emite recomendación hasta que las tres alternativas tengan probabilidades válidas.';
+   $('decisionReason').textContent='Corrija las probabilidades marcadas en rojo.';
+   return {sorted,best:sorted[0]||null};
+ }
+ const best=sorted[0], second=sorted[1];
+ $('decisionText').textContent='Con estos supuestos, la alternativa de mayor VME es '+best.name+' (US$ '+fmt(best.vme)+' MM).';
+ $('decisionReason').textContent='Ventaja sobre la segunda alternativa: US$ '+fmt(best.vme-second.vme)+' MM de VME. Compare también el peor escenario antes de decidir.';
+ return {sorted,best};
+}
+function renderSensitivity(A,B,C,best){
+ const rivalForA=Math.max(B.vme,C.vme);
+ const rivalForB=Math.max(A.vme,C.vme);
+ const rivalForC=Math.max(A.vme,B.vme);
+ const ta=thresholdAB(A,rivalForA);
+ const tb=thresholdAB(B,rivalForB);
+ const tc=thresholdC(C,rivalForC);
+
+ const validA=ta>=0&&ta<=1-A.ps[2];
+ const validB=tb>=0&&tb<=1-B.ps[2];
+ const validC=tc>=0&&tc<=1;
+
+ $('aThreshold').textContent=validA?pct(ta):'Fuera de rango';
+ $('bThreshold').textContent=validB?pct(tb):'Fuera de rango';
+ $('cThreshold').textContent=validC?pct(tc):'Fuera de rango';
+
+ const gaps=[];
+ if(validA) gaps.push({label:'A',gap:Math.abs(A.ps[0]-ta)});
+ if(validB) gaps.push({label:'B',gap:Math.abs(B.ps[0]-tb)});
+ if(validC) gaps.push({label:'C',gap:Math.abs(C.reg-tc)});
+ gaps.sort((x,y)=>x.gap-y.gap);
+ $('marginToSwitch').textContent=gaps.length?pct(gaps[0].gap):'—';
+
+ let notes=[];
+ if(validA) notes.push('A: actual '+pct(A.ps[0])+' → umbral '+pct(ta)+'.');
+ if(validB) notes.push('B: actual '+pct(B.ps[0])+' → umbral '+pct(tb)+'.');
+ if(validC) notes.push('C: actual '+pct(C.reg)+' → umbral '+pct(tc)+'.');
+ $('sensNote').textContent=notes.join(' ');
+
+ renderThresholdMath(A,B,C,ta,tb,tc,rivalForA,rivalForB,rivalForC,validA,validB,validC);
+ return {ta,tb,tc,validA,validB,validC};
+}
+function renderThresholdMath(A,B,C,ta,tb,tc,targetA,targetB,targetC,validA,validB,validC){
+ function abFormula(P,target,t){
+   const low=P.ps[2], rem=1-low;
+   return {
+     formula:`VME(p) = p×${fmt(P.fs[0])} + (${rem.toFixed(2)}−p)×${fmt(P.fs[1])} + ${low.toFixed(2)}×${fmt(P.fs[2])} − ${fmt(P.inv)}`,
+     steps:[
+       `1. Igualamos el VME de la alternativa al VME rival: VME(p) = ${fmt(target)}.`,
+       `2. Mantenemos fija la probabilidad del escenario bajo/fallido en ${pct(low)}.`,
+       `3. La probabilidad intermedia pasa a ser ${rem.toFixed(2)} − p.`,
+       validA?`4. Despejamos p. Umbral = ${pct(t)}.`:`4. El valor despejado queda fuera del rango probabilístico posible.`
+     ]
+   }
+ }
+ const a=abFormula(A,targetA,ta);
+ $('aFormula').textContent=a.formula;
+ $('aSteps').innerHTML=a.steps.map(x=>`<li>${x}</li>`).join('');
+
+ const lowB=B.ps[2], remB=1-lowB;
+ $('bFormula').textContent=`VME(p) = p×${fmt(B.fs[0])} + (${remB.toFixed(2)}−p)×${fmt(B.fs[1])} + ${lowB.toFixed(2)}×${fmt(B.fs[2])} − ${fmt(B.inv)}`;
+ $('bSteps').innerHTML=[
+   `1. Igualamos VME_B(p) al mejor rival: ${fmt(targetB)}.`,
+   `2. Mantenemos adopción fallida fija en ${pct(lowB)}.`,
+   `3. La adopción parcial pasa a ser ${remB.toFixed(2)} − p.`,
+   validB?`4. Despejamos p. Umbral = ${pct(tb)}.`:`4. El valor despejado queda fuera del rango probabilístico posible.`
+ ].map(x=>`<li>${x}</li>`).join('');
+
+ const approvedEV=C.high*C.fs[0]+(1-C.high)*C.fs[1];
+ $('cFormula').textContent=`VME(r) = r×${fmt(approvedEV)} + (1−r)×${fmt(C.fs[2])} − ${fmt(C.inv)}`;
+ $('cSteps').innerHTML=[
+   `1. Valor esperado condicionado a habilitación = ${pct(C.high)}×${fmt(C.fs[0])} + ${pct(1-C.high)}×${fmt(C.fs[1])} = ${fmt(approvedEV)}.`,
+   `2. Igualamos VME_C(r) al mejor rival: ${fmt(targetC)}.`,
+   `3. Si no hay habilitación, el flujo permanece en ${fmt(C.fs[2])}.`,
+   validC?`4. Despejamos r. Umbral = ${pct(tc)}.`:`4. El valor despejado queda fuera del rango 0–100 %.`
+ ].map(x=>`<li>${x}</li>`).join('');
+
+ $('applyAThreshold').disabled=!validA;
+ $('applyBThreshold').disabled=!validB;
+ $('applyCThreshold').disabled=!validC;
+ $('applyAThreshold').dataset.threshold=validA?ta:'';
+ $('applyBThreshold').dataset.threshold=validB?tb:'';
+ $('applyCThreshold').dataset.threshold=validC?tc:'';
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function renderTree(A,B,C,bestName){
+ const svg=$('treeSvg'); const color={A:'var(--a)',B:'var(--b)',C:'var(--c)'};
+ const projects=[
+  {key:'A',name:'A Verde',y:105,p:A.ps,labels:['Adopción alta','Adopción moderada','Adopción baja'],nets:A.nets,vme:A.vme},
+  {key:'B',name:'B Pulso',y:285,p:B.ps,labels:['Adopción alta','Adopción parcial','Adopción fallida'],nets:B.nets,vme:B.vme},
+ ];
+ let out=`<rect x="35" y="265" width="20" height="20" class="node-decision"></rect><text x="20" y="315" class="lbl">DECISIÓN</text>`;
+ projects.forEach(P=>{
+   const isBest=bestName.startsWith(P.key);
+   out+=`<path d="M55 275 L210 ${P.y}" class="branch ${isBest?'best':''}"></path>
+         <circle cx="220" cy="${P.y}" r="11" class="node-chance"></circle>
+         <text x="82" y="${P.y-12}" class="lbl" fill="${color[P.key]}">${P.name} · VME ${fmt(P.vme)}</text>`;
+   [-55,0,55].forEach((dy,i)=>{
+      out+=`<path d="M231 ${P.y} L455 ${P.y+dy}" class="branch"></path>
+      <text x="260" y="${P.y+dy-8}" class="lbl">${esc(P.labels[i])} · p=${P.p[i].toFixed(2)}</text>
+      <text x="465" y="${P.y+dy+4}" class="money">Neto ${fmt(P.nets[i])}</text>`;
+   });
+ });
+ // C sequential
+ const y=465, isBest=bestName.startsWith('C');
+ out+=`<path d="M55 275 L210 ${y}" class="branch ${isBest?'best':''}"></path>
+       <circle cx="220" cy="${y}" r="11" class="node-chance"></circle>
+       <text x="82" y="${y-15}" class="lbl">C Istmo · VME ${fmt(C.vme)}</text>
+       <path d="M231 ${y} L405 ${y-45}" class="branch"></path>
+       <text x="255" y="${y-58}" class="lbl">Habilitada · p=${C.reg.toFixed(2)}</text>
+       <circle cx="415" cy="${y-45}" r="11" class="node-chance"></circle>
+       <path d="M426 ${y-45} L690 ${y-85}" class="branch"></path>
+       <text x="475" y="${y-95}" class="lbl">Demanda alta · p=${C.high.toFixed(2)} · conjunta=${C.ps[0].toFixed(2)}</text>
+       <text x="700" y="${y-81}" class="money">Neto ${fmt(C.nets[0])}</text>
+       <path d="M426 ${y-45} L690 ${y-15}" class="branch"></path>
+       <text x="475" y="${y-25}" class="lbl">Demanda moderada · p=${(1-C.high).toFixed(2)} · conjunta=${C.ps[1].toFixed(2)}</text>
+       <text x="700" y="${y-11}" class="money">Neto ${fmt(C.nets[1])}</text>
+       <path d="M231 ${y} L690 ${y+65}" class="branch"></path>
+       <text x="360" y="${y+54}" class="lbl">Denegada / inviable · p=${C.ps[2].toFixed(2)}</text>
+       <text x="700" y="${y+69}" class="money">Neto ${fmt(C.nets[2])}</text>`;
+ svg.innerHTML=out;
+}
+function teaching(A,B,C,best){
+ const sorted=[A,B,C].sort((x,y)=>y.vme-x.vme);
+ const bestWorst=Math.max(...sorted.map(x=>Math.min(...x.nets)));
+ let t=`<b>${best.name}</b> lidera por VME con los datos actuales. `;
+ t+=`El mejor peor-escenario entre las tres alternativas es US$ ${fmt(bestWorst)} MM. `;
+ t+=`Cambie una probabilidad o un flujo y observe si el ranking se mueve: esa es la lógica del análisis de sensibilidad. `;
+ t+=`Una decisión defendible no depende solo del VME: también debe explicitar supuestos, riesgo y qué información adicional podría cambiar la recomendación.`;
+ $('teachingText').innerHTML=t;
+}
+function recalc(){
+ const A=projectAB('a','A · Verde'), B=projectAB('b','B · Pulso'), C=projectC();
+ const {best}=renderRank([A,B,C]);
+ if(A.valid && B.valid && C.valid && best){
+   renderSensitivity(A,B,C,best);
+   renderTree(A,B,C,best.name);
+   teaching(A,B,C,best);
+ } else {
+   $('aThreshold').textContent='—'; $('bThreshold').textContent='—'; $('cThreshold').textContent='—'; $('marginToSwitch').textContent='—';
+   $('sensNote').textContent='Corrija primero las probabilidades inválidas.';
+ }
+}
+document.querySelectorAll('input').forEach(el=>el.addEventListener('input',recalc));
+$('resetBtn').addEventListener('click',setDefaults);
+$('verifyBtn').addEventListener('click',()=>{
+      recalc();
+      const A=projectAB('a','A · Verde'), B=projectAB('b','B · Pulso'), C=projectC();
+      if(A.valid && B.valid){
+        alert(
+          'Auditoría del VME con los valores actuales:\n\n'+
+          'A · Verde = US$ '+fmt(A.vme)+' MM\n'+
+          'B · Pulso = US$ '+fmt(B.vme)+' MM\n'+
+          'C · Istmo = US$ '+fmt(C.vme)+' MM\n\n'+
+          'Cada valor se comprobó también ponderando directamente los resultados netos de inversión.'
+        );
+      }
+    });
+
+$('applyAThreshold').addEventListener('click',()=>{
+ const t=parseFloat($('applyAThreshold').dataset.threshold);
+ if(!Number.isFinite(t))return;
+ const low=clamp(n('aP3'),0,1);
+ $('aP1').value=t.toFixed(4);
+ recalc();
+});
+$('applyBThreshold').addEventListener('click',()=>{
+ const t=parseFloat($('applyBThreshold').dataset.threshold);
+ if(!Number.isFinite(t))return;
+ const low=clamp(n('bP3'),0,1);
+ $('bP1').value=t.toFixed(4);
+ recalc();
+});
+$('applyCThreshold').addEventListener('click',()=>{
+ const t=parseFloat($('applyCThreshold').dataset.threshold);
+ if(!Number.isFinite(t))return;
+ $('cReg').value=t.toFixed(4);
+ recalc();
+});
+setDefaults();
+})();
+</script>
+</body>
+</html>
