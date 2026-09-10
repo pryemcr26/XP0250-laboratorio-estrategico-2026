@@ -26,8 +26,10 @@
 <div class="wrap">
   <div class="card">
     <h1>XP0250 · Carga administrativa de estudiantes</h1>
-    <p>Esta herramienta carga la lista blanca <code>usuarios_autorizados</code> en Firestore. Solo funciona para una cuenta registrada como docente en <code>administradores</code>.</p>
-    <button id="loginBtn">Ingresar con Google</button>
+    <p>Esta herramienta carga la lista blanca <code>usuarios_autorizados</code> en Firestore. Solo funciona para una cuenta <code>@ucr.ac.cr</code> registrada como docente en <code>administradores</code>.</p>
+    <label for="emailInput"><strong>Correo institucional @ucr.ac.cr</strong></label><br>
+    <input id="emailInput" type="email" placeholder="nombre@ucr.ac.cr" style="padding:10px;margin:10px 8px 10px 0;min-width:280px">
+    <button id="loginBtn">Enviarme enlace de acceso</button>
     <button id="logoutBtn" class="secondary" disabled>Cerrar sesión</button>
     <p id="authStatus" class="muted">No autenticado.</p>
   </div>
@@ -50,7 +52,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+  import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -65,9 +67,8 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ hd: "ucr.ac.cr" });
 
+  const emailInput = document.getElementById("emailInput");
   const loginBtn = document.getElementById("loginBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const csvFile = document.getElementById("csvFile");
@@ -108,12 +109,58 @@
     return low.indexOf(wanted.toLowerCase());
   }
 
+  const actionCodeSettings = {
+    url: window.location.origin + window.location.pathname,
+    handleCodeInApp: true
+  };
+
   loginBtn.onclick = async () => {
-    try { await signInWithPopup(auth, provider); }
-    catch (e) { log.textContent = "Error de autenticación: " + e.message; }
+    try {
+      const email = (emailInput.value || "").trim().toLowerCase();
+
+      if (!email.endsWith("@ucr.ac.cr")) {
+        throw new Error("Use su correo institucional @ucr.ac.cr.");
+      }
+
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      window.localStorage.setItem("xp0250EmailForSignIn", email);
+      authStatus.innerHTML = `<span class="ok">Enlace enviado.</span> Revise el correo ${email} y abra el enlace de acceso.`;
+      log.textContent = "El enlace de autenticación fue enviado. Puede dejar esta pestaña abierta o regresar mediante el enlace recibido.";
+    } catch (e) {
+      log.textContent = "Error de autenticación: " + e.message;
+    }
   };
 
   logoutBtn.onclick = () => signOut(auth);
+
+  async function completeEmailLinkSignIn() {
+    if (!isSignInWithEmailLink(auth, window.location.href)) return;
+
+    let email = window.localStorage.getItem("xp0250EmailForSignIn");
+
+    if (!email) {
+      email = window.prompt("Confirme su correo institucional @ucr.ac.cr:");
+    }
+
+    if (!email) {
+      log.textContent = "No se pudo completar el acceso porque no se indicó el correo.";
+      return;
+    }
+
+    email = email.trim().toLowerCase();
+
+    try {
+      await signInWithEmailLink(auth, email, window.location.href);
+      window.localStorage.removeItem("xp0250EmailForSignIn");
+
+      // Limpia los parámetros del enlace para evitar reutilización accidental.
+      window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
+    } catch (e) {
+      log.textContent = "Error al completar el acceso por correo: " + e.message;
+    }
+  }
+
+  await completeEmailLinkSignIn();
 
   onAuthStateChanged(auth, async user => {
     isAdmin = false;
@@ -126,11 +173,13 @@
     if (!user) {
       authStatus.textContent = "No autenticado.";
       loginBtn.disabled = false;
+      emailInput.disabled = false;
       fileStatus.textContent = "Primero ingrese como docente.";
       return;
     }
 
     loginBtn.disabled = true;
+    emailInput.disabled = true;
     const email = (user.email || "").toLowerCase();
     authStatus.textContent = `Autenticado como ${email}. Verificando rol docente...`;
 
