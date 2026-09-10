@@ -5,15 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>XP0250 · Equipo 6 · Servicios corporativos globales</title>
 <style>
-:root{--green:#0b7a45;--dark:#17352b;--bg:#f5f7f6;--card:#fff;--line:#d9e3de;--muted:#60726a;--warn:#8a5a00}
+:root{--green:#0b7a45;--dark:#17352b;--bg:#f5f7f6;--card:#fff;--line:#d9e3de;--muted:#60726a}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#1f2a25}
 header{background:linear-gradient(135deg,#145a39,#0b7a45);color:#fff;padding:22px}
 .wrap{max-width:1100px;margin:auto} main{max-width:1100px;margin:18px auto;padding:0 16px 36px}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;box-shadow:0 3px 12px #0000000b}
 h1{margin:0;font-size:1.65rem} h2{color:var(--dark);margin-top:0} h3{color:var(--dark)}
 .badge{display:inline-block;background:#ffffff20;border:1px solid #ffffff55;border-radius:999px;padding:6px 10px;margin-top:8px}
-.evidence{background:#f8fbf9;border:1px solid var(--line);border-radius:9px;padding:10px;margin:8px 0}
-.tag{font-size:.75rem;background:#eaf5ef;border-radius:999px;padding:3px 7px;margin-right:5px}
 label{font-weight:700;display:block;margin:8px 0 4px}
 textarea,input,select{width:100%;padding:9px;border:1px solid #cbd8d1;border-radius:8px;font:inherit}
 textarea{min-height:72px;resize:vertical}
@@ -26,7 +24,8 @@ button{background:var(--green);color:white;border:0;border-radius:8px;padding:10
 button.secondary{background:#eef3f0;color:var(--dark);border:1px solid var(--line)}
 .step{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--green);font-weight:800}
 .notice{background:#edf8f2;border-left:4px solid var(--green);padding:12px;border-radius:8px}
-.warning{background:#fff8e8;border-left:4px solid #d89a00;padding:12px;border-radius:8px;color:#604500}
+.guide{background:#f3f7ff;border-left:4px solid #4f6fbf;padding:12px;border-radius:8px;margin:12px 0}
+.legend{background:#fff8e8;border-left:4px solid #d89a00;padding:12px;border-radius:8px;margin:12px 0}
 .muted{color:var(--muted);font-size:.9rem}
 table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);padding:8px;vertical-align:top} th{background:#eff6f2}
 .candidate{display:inline-block;background:#fff0bf;color:#6c4b00;border-radius:999px;padding:3px 7px;font-size:.75rem;font-weight:700}
@@ -49,52 +48,56 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
   <p>El sector compite por talento, productividad, conectividad, seguridad de datos y capacidad de mover actividades hacia automatización o nuevas geografías.</p>
   <div class="notice"><b>Una persona será relatora.</b> El equipo discute; solo la persona relatora escribe. El simulador guarda automáticamente en este navegador.</div>
   <p class="muted">Secuencia de trabajo: contexto → PESTEL → Cinco Fuerzas → diagnóstico integrado → escenarios → decisión robusta → señales.</p>
-</div>
-
-<div class="card">
-  <div class="step">Paquete de evidencia didáctica</div>
-  <h2>Evidencias para analizar</h2>
-  <div class="evidence"><span class="tag">Compradores</span><b>E1</b> · Grandes clientes pueden relocalizar procesos entre países y proveedores.</div>
-<div class="evidence"><span class="tag">Sustitutos</span><b>E2</b> · IA y automatización sustituyen tareas rutinarias y cambian perfiles laborales.</div>
-<div class="evidence"><span class="tag">Proveedores</span><b>E3</b> · Talento bilingüe y especializado es un insumo escaso.</div>
-<div class="evidence"><span class="tag">Legal</span><b>E4</b> · Protección de datos y ciberseguridad elevan exigencias regulatorias.</div>
-<div class="evidence"><span class="tag">Infraestructura</span><b>E5</b> · Electricidad y continuidad digital condicionan operaciones 24/7.</div>
-<div class="evidence"><span class="tag">Ambiental</span><b>E6</b> · Riesgos climáticos pueden interrumpir infraestructura y movilidad del personal.</div>
-  <p class="muted">Estas evidencias son insumos breves y simulados. Úsenlas para justificar decisiones cuando sean pertinentes y compleméntenlas con inferencias razonadas. No sustituyen las fuentes reales requeridas en el Trabajo Sectorial.</p>
+  <div class="guide"><b>Ejemplo de organización:</b> una persona comparte pantalla y escribe; las demás aportan argumentos, cuestionan supuestos y verifican que cada respuesta sea breve y justificable.</div>
 </div>
 
 <div class="card">
   <div class="step">Paso 1 · 25 minutos</div>
   <h2>PESTEL priorizado: del macroentorno a la industria</h2>
   <p>Valore cada tendencia por <b>impacto</b> y <b>probabilidad</b> en una escala de 1 a 3. El simulador calcula I × P. Seleccione una lista corta de 3 a 5 tendencias.</p>
-  <div class="warning">Regla de lectura: una tendencia de impacto 3 y probabilidad 1 no se descarta; se marca como <b>candidata a escenarios</b>.</div>
+
+  <div class="legend">
+    <b>¿Qué significa la escala?</b><br><br>
+    <b>Impacto:</b> 1 = efecto bajo o limitado sobre el sector; 2 = efecto medio, relevante pero manejable; 3 = efecto alto, capaz de alterar costos, demanda, regulación, inversión o competitividad.<br><br>
+    <b>Probabilidad:</b> 1 = baja probabilidad en el horizonte analizado; 2 = probabilidad media o evolución incierta; 3 = alta probabilidad o tendencia ya visible/consolidada.<br><br>
+    <b>I × P:</b> sirve para priorizar. Una tendencia con Impacto 3 y Probabilidad 1 no se elimina: se considera candidata para escenarios.
+  </div>
+
+  <div class="guide"><b>Ejemplo práctico:</b> Ejemplo: “Tecnología / automatización” → Impacto 3, Probabilidad 3, I×P = 9. Se prioriza porque la IA puede sustituir tareas rutinarias y cambiar el valor de los perfiles laborales.</div>
+
   <table>
     <thead><tr><th>Tendencia</th><th>Dimensión</th><th>Impacto 1–3</th><th>Probabilidad 1–3</th><th>I × P</th><th>¿Lista corta?</th><th>Escenarios</th></tr></thead>
     <tbody id="pestel"></tbody>
   </table>
+
   <h3>Justifique las 3 tendencias prioritarias</h3>
   <div class="grid">
     <div><label>Prioridad 1</label><textarea id="p1" placeholder="Tendencia + por qué mueve la aguja para este sector"></textarea></div>
     <div><label>Prioridad 2</label><textarea id="p2" placeholder="Tendencia + por qué mueve la aguja para este sector"></textarea></div>
   </div>
   <label>Prioridad 3</label><textarea id="p3" placeholder="Tendencia + por qué mueve la aguja para este sector"></textarea>
+
   <label>Puente PESTEL → industria</label>
   <textarea id="pestelBridge" placeholder="En 3–4 líneas: ¿cómo podrían estas tendencias alterar las reglas de competencia, los costos, los compradores, los proveedores, la entrada o los sustitutos?"></textarea>
+  <div class="guide"><b>Ejemplo de puente:</b> “Si aumentan la regulación y los costos logísticos, pueden subir las barreras de entrada, aumentar el poder de proveedores especializados y modificar la rivalidad entre localizaciones.”</div>
 </div>
 
 <div class="card">
   <div class="step">Paso 2 · 25 minutos</div>
   <h2>Cinco Fuerzas: estructura competitiva</h2>
-  <p>Ahora analicen la industria a la luz del macroentorno priorizado. Para cada fuerza elijan un nivel y escriban una frase de argumento. Usen E1–E6 cuando sean pertinentes.</p>
+  <p>Ahora analicen la industria a la luz del macroentorno priorizado. Para cada fuerza elijan un nivel y escriban una frase de argumento basada en la lógica del sector.</p>
+  <div class="guide"><b>Ejemplo práctico:</b> Ejemplo: “Amenaza de sustitutos = Alta”. Argumento: automatización e IA pueden reemplazar procesos estandarizados que antes se externalizaban a centros de servicios.</div>
   <div id="forces"></div>
   <label>Síntesis de Porter</label>
   <textarea id="porterSynth" placeholder="En 3–4 líneas: ¿cuáles una o dos fuerzas dominan la rentabilidad/competitividad de esta industria y por qué?"></textarea>
+  <div class="guide"><b>Ejemplo de síntesis:</b> “Las fuerzas dominantes son el poder de compradores y proveedores, porque concentran capacidad de negociación y pueden trasladar costos o exigencias al resto de la cadena.”</div>
 </div>
 
 <div class="card">
   <div class="step">Paso 3 · 10 minutos</div>
   <h2>Diagnóstico externo integrado</h2>
   <p>Integre lo aprendido del macroentorno y de la estructura competitiva. No repita listas: formule el desafío u oportunidad central.</p>
+  <div class="guide"><b>Ejemplo práctico:</b> Ejemplo: “La ventaja basada solo en costo laboral pierde fuerza; el reto es migrar hacia servicios de mayor complejidad mientras se protege talento, datos y continuidad digital.”</div>
   <label>Diagnóstico integrado</label>
   <textarea id="integratedDiag" placeholder="Considerando PESTEL + Cinco Fuerzas, ¿cuál es el desafío u oportunidad estratégica central del sector costarricense?"></textarea>
   <label>Clasificación dominante</label>
@@ -106,19 +109,15 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
   <h2>Escenarios 2030</h2>
   <p>Partan de las tendencias de alto impacto y alta incertidumbre. Elijan dos incertidumbres críticas e independientes, definan sus polos y construyan cuatro mundos plausibles.</p>
   <div id="candidateBox" class="notice"><b>Candidatas detectadas:</b> aún no hay variables marcadas automáticamente.</div>
-  <h3>Banco de incertidumbres del sector</h3>
-  <span class="tag" style="display:inline-block;margin:3px">Velocidad de automatización con IA</span>
-<span class="tag" style="display:inline-block;margin:3px">Costo y disponibilidad de talento</span>
-<span class="tag" style="display:inline-block;margin:3px">Regulación internacional de datos</span>
-<span class="tag" style="display:inline-block;margin:3px">Continuidad de infraestructura digital</span>
-<span class="tag" style="display:inline-block;margin:3px">Nearshoring de servicios</span>
-<span class="tag" style="display:inline-block;margin:3px">Riesgo climático sobre continuidad operativa</span>
+  <div class="guide"><b>Ejemplo práctico:</b> Ejemplo de ejes: X = automatización gradual ↔ acelerada; Y = abundancia de talento especializado ↔ escasez. Un escenario podría llamarse “Escalamiento inteligente”.</div>
+
   <div class="grid">
     <div><label>Eje X</label><input id="axisX" placeholder="Ej. apertura comercial ↔ fragmentación"></div>
     <div><label>Eje Y</label><input id="axisY" placeholder="Ej. alta resiliencia ↔ alta vulnerabilidad"></div>
   </div>
   <label>¿Por qué estos dos ejes son críticos, inciertos e independientes?</label>
   <textarea id="axesWhy" placeholder="Máximo 4–5 líneas."></textarea>
+
   <div class="matrix">
     <div class="quad"><div class="combo">Escenario 1 = X favorable + Y favorable</div><label>Nombre</label><input id="s1n"><label>Narrativa</label><textarea id="s1" placeholder="¿Qué ocurre y qué implica para Costa Rica?"></textarea></div>
     <div class="quad"><div class="combo">Escenario 2 = X desfavorable + Y favorable</div><label>Nombre</label><input id="s2n"><label>Narrativa</label><textarea id="s2" placeholder="¿Qué ocurre y qué implica para Costa Rica?"></textarea></div>
@@ -130,6 +129,8 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
 <div class="card">
   <div class="step">Paso 5 · 15 minutos</div>
   <h2>Decisión robusta y señales</h2>
+  <p>Formulen una orientación que tenga sentido en varios escenarios y conviértanla en acciones y señales observables.</p>
+  <div class="guide"><b>Ejemplo práctico:</b> Ejemplo: Política orientadora: “subir en la cadena de valor”. Acción: reconvertir talento hacia análisis y automatización. Señal: automatización &gt;30% de tareas; fuente: empresa/clientes; umbral: &gt;30% del volumen.</div>
   <label>Política orientadora</label><textarea id="policy" placeholder="¿Qué enfoque debería seguir una empresa del sector o el equipo país ante varios escenarios?"></textarea>
   <label>Tres acciones coherentes / jugadas sin arrepentimiento</label><textarea id="actions" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea>
   <div class="grid">
@@ -150,6 +151,7 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
   <div class="step">Cierre · 5 minutos</div>
   <h2>Guardar y entregar</h2>
   <p>El trabajo se guarda automáticamente. Al terminar, descargue un respaldo y genere el informe para discutirlo en clase.</p>
+  <div class="guide"><b>Ejemplo:</b> la persona relatora pulsa “Generar informe”, revisa con el equipo que no haya campos vacíos y luego descarga el respaldo JSON antes de cerrar el navegador.</div>
   <button onclick="saveNow()">Guardar ahora</button>
   <button class="secondary" onclick="downloadBackup()">Descargar respaldo JSON</button>
   <button class="secondary" onclick="document.getElementById('importFile').click()">Importar respaldo</button>
@@ -165,7 +167,7 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
 <script>
 const TEAM=6;
 const SECTOR="Servicios corporativos globales";
-const STORAGE_KEY='xp0250_equipo_6_servicios-corporativos-globales_v3';
+const STORAGE_KEY='xp0250_equipo_6_servicios-corporativos-globales_v4';
 const forcesNames=['Amenaza de nuevos entrantes','Poder de proveedores','Poder de compradores','Amenaza de sustitutos','Rivalidad entre competidores'];
 
 const pestelVars=[
@@ -208,11 +210,11 @@ function updatePestelScores(){
 
 function renderForces(){
   document.getElementById('forces').innerHTML=forcesNames.map((f,i)=>`
-  <div class="evidence">
+  <div style="background:#f8fbf9;border:1px solid #d9e3de;border-radius:9px;padding:10px;margin:8px 0">
     <label>${f}</label>
     <div class="grid">
       <select id="fl${i}"><option value="">Nivel...</option><option>Baja</option><option>Media</option><option>Alta</option></select>
-      <textarea id="fr${i}" placeholder="Argumento breve + evidencia pertinente o inferencia razonada"></textarea>
+      <textarea id="fr${i}" placeholder="Argumento breve basado en la lógica del sector"></textarea>
     </div>
   </div>`).join('');
 }
