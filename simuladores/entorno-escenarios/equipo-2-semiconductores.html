@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>XP0250 · Equipo 2 · Semiconductores</title>
 <style>
-:root{--green:#0b7a45;--dark:#17352b;--bg:#f5f7f6;--card:#fff;--line:#d9e3de;--muted:#60726a}
+:root{--green:#0b7a45;--dark:#17352b;--bg:#f5f7f6;--card:#fff;--line:#d9e3de;--muted:#60726a;--warn:#8a5a00}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#1f2a25}
 header{background:linear-gradient(135deg,#145a39,#0b7a45);color:#fff;padding:22px}
 .wrap{max-width:1100px;margin:auto} main{max-width:1100px;margin:18px auto;padding:0 16px 36px}
@@ -26,8 +26,11 @@ button{background:var(--green);color:white;border:0;border-radius:8px;padding:10
 button.secondary{background:#eef3f0;color:var(--dark);border:1px solid var(--line)}
 .step{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--green);font-weight:800}
 .notice{background:#edf8f2;border-left:4px solid var(--green);padding:12px;border-radius:8px}
+.warning{background:#fff8e8;border-left:4px solid #d89a00;padding:12px;border-radius:8px;color:#604500}
 .muted{color:var(--muted);font-size:.9rem}
 table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);padding:8px;vertical-align:top} th{background:#eff6f2}
+.candidate{display:inline-block;background:#fff0bf;color:#6c4b00;border-radius:999px;padding:3px 7px;font-size:.75rem;font-weight:700}
+.score{font-weight:700;text-align:center}
 #status{position:fixed;right:14px;bottom:14px;background:#17352b;color:white;padding:8px 11px;border-radius:10px;font-size:.85rem}
 @media print{button,#status,.noprint{display:none!important}body{background:white}.card{box-shadow:none}}
 </style>
@@ -37,71 +40,85 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
 <h1>XP0250 · Simulador Estratégico · Equipo 2</h1>
 <div class="badge">Semiconductores</div>
 </div></header>
-<main>
 
+<main>
 <div class="card">
   <div class="step">Inicio · 10 minutos</div>
   <h2>Reto del equipo</h2>
   <p><b>Sector:</b> Semiconductores</p>
   <p>La competencia se organiza alrededor de capacidades tecnológicas, talento, confiabilidad energética, incentivos, propiedad intelectual y geopolítica de cadenas críticas.</p>
   <div class="notice"><b>Una persona será relatora.</b> El equipo discute; solo la persona relatora escribe. El simulador guarda automáticamente en este navegador.</div>
-  <p class="muted">Objetivo: diagnosticar estructura competitiva y macroentorno con evidencia, y construir escenarios accionables incorporando geopolítica, resiliencia de cadenas y riesgo climático/regulatorio.</p>
+  <p class="muted">Secuencia de trabajo: contexto → PESTEL → Cinco Fuerzas → diagnóstico integrado → escenarios → decisión robusta → señales.</p>
 </div>
 
 <div class="card">
   <div class="step">Paquete de evidencia didáctica</div>
-  <h2>Evidencias para argumentar</h2>
+  <h2>Evidencias para analizar</h2>
   <div class="evidence"><span class="tag">Entrada</span><b>E1</b> · El capital fijo y la complejidad tecnológica elevan barreras de entrada.</div>
 <div class="evidence"><span class="tag">Proveedores</span><b>E2</b> · Equipos y materiales especializados pueden concentrarse en pocos proveedores.</div>
 <div class="evidence"><span class="tag">Compradores</span><b>E3</b> · Los clientes globales demandan continuidad, calidad y trazabilidad.</div>
 <div class="evidence"><span class="tag">Político</span><b>E4</b> · Los subsidios e incentivos nacionales alteran la localización de inversión.</div>
 <div class="evidence"><span class="tag">Ambiental</span><b>E5</b> · La huella hídrica y energética aumenta la exposición ambiental.</div>
 <div class="evidence"><span class="tag">Geopolítica</span><b>E6</b> · Restricciones tecnológicas entre bloques pueden rediseñar mercados y proveedores.</div>
-  <p class="muted">Estas evidencias son simuladas para fines pedagógicos. Úselas cuando sean pertinentes y compleméntelas con inferencias razonadas. No sustituyen las fuentes verificables exigidas en el Trabajo Sectorial.</p>
+  <p class="muted">Estas evidencias son insumos breves y simulados. Úsenlas para justificar decisiones cuando sean pertinentes y compleméntenlas con inferencias razonadas. No sustituyen las fuentes reales requeridas en el Trabajo Sectorial.</p>
 </div>
 
 <div class="card">
   <div class="step">Paso 1 · 25 minutos</div>
-  <h2>Cinco Fuerzas: diagnóstico rápido</h2>
-  <p>Para cada fuerza elija un nivel y escriba una frase de argumento. Use las evidencias E1–E6 cuando sean pertinentes; si ninguna aplica directamente, formule una inferencia razonada.</p>
-  <div id="forces"></div>
-  <label>Diagnóstico estructural del sector</label>
-  <textarea id="structDiag" placeholder="En 3–4 líneas: ¿qué tan atractivo resulta el sector y cuál es la principal presión sobre su rentabilidad o competitividad?"></textarea>
+  <h2>PESTEL priorizado: del macroentorno a la industria</h2>
+  <p>Valore cada tendencia por <b>impacto</b> y <b>probabilidad</b> en una escala de 1 a 3. El simulador calcula I × P. Seleccione una lista corta de 3 a 5 tendencias.</p>
+  <div class="warning">Regla de lectura: una tendencia de impacto 3 y probabilidad 1 no se descarta; se marca como <b>candidata a escenarios</b>.</div>
+  <table>
+    <thead><tr><th>Tendencia</th><th>Dimensión</th><th>Impacto 1–3</th><th>Probabilidad 1–3</th><th>I × P</th><th>¿Lista corta?</th><th>Escenarios</th></tr></thead>
+    <tbody id="pestel"></tbody>
+  </table>
+  <h3>Justifique las 3 tendencias prioritarias</h3>
+  <div class="grid">
+    <div><label>Prioridad 1</label><textarea id="p1" placeholder="Tendencia + por qué mueve la aguja para este sector"></textarea></div>
+    <div><label>Prioridad 2</label><textarea id="p2" placeholder="Tendencia + por qué mueve la aguja para este sector"></textarea></div>
+  </div>
+  <label>Prioridad 3</label><textarea id="p3" placeholder="Tendencia + por qué mueve la aguja para este sector"></textarea>
+  <label>Puente PESTEL → industria</label>
+  <textarea id="pestelBridge" placeholder="En 3–4 líneas: ¿cómo podrían estas tendencias alterar las reglas de competencia, los costos, los compradores, los proveedores, la entrada o los sustitutos?"></textarea>
 </div>
 
 <div class="card">
   <div class="step">Paso 2 · 25 minutos</div>
-  <h2>PESTEL priorizado</h2>
-  <p>Valore el impacto de cada variable del 1 al 5 y seleccione las <b>5 más críticas</b>. Una debe reflejar, cuando corresponda, el factor ambiental.</p>
-  <table>
-    <thead><tr><th>Variable</th><th>Dimensión</th><th>Impacto 1–5</th><th>¿Top 5?</th></tr></thead>
-    <tbody id="pestel"></tbody>
-  </table>
-  <h3>Justifique las 3 variables más importantes</h3>
-  <div class="grid">
-    <div><label>Prioridad 1</label><textarea id="p1" placeholder="Variable + por qué es crítica para este sector"></textarea></div>
-    <div><label>Prioridad 2</label><textarea id="p2" placeholder="Variable + por qué es crítica para este sector"></textarea></div>
-  </div>
-  <label>Prioridad 3</label><textarea id="p3" placeholder="Variable + por qué es crítica para este sector"></textarea>
+  <h2>Cinco Fuerzas: estructura competitiva</h2>
+  <p>Ahora analicen la industria a la luz del macroentorno priorizado. Para cada fuerza elijan un nivel y escriban una frase de argumento. Usen E1–E6 cuando sean pertinentes.</p>
+  <div id="forces"></div>
+  <label>Síntesis de Porter</label>
+  <textarea id="porterSynth" placeholder="En 3–4 líneas: ¿cuáles una o dos fuerzas dominan la rentabilidad/competitividad de esta industria y por qué?"></textarea>
 </div>
 
 <div class="card">
-  <div class="step">Paso 3 · 35 minutos</div>
+  <div class="step">Paso 3 · 10 minutos</div>
+  <h2>Diagnóstico externo integrado</h2>
+  <p>Integre lo aprendido del macroentorno y de la estructura competitiva. No repita listas: formule el desafío u oportunidad central.</p>
+  <label>Diagnóstico integrado</label>
+  <textarea id="integratedDiag" placeholder="Considerando PESTEL + Cinco Fuerzas, ¿cuál es el desafío u oportunidad estratégica central del sector costarricense?"></textarea>
+  <label>Clasificación dominante</label>
+  <select id="oa"><option value="">Seleccione...</option><option>Oportunidad dominante</option><option>Amenaza dominante</option><option>Combinación de oportunidad y amenaza</option></select>
+</div>
+
+<div class="card">
+  <div class="step">Paso 4 · 30 minutos</div>
   <h2>Escenarios 2030</h2>
-  <p>Elijan dos incertidumbres críticas e independientes. Definan claramente sus polos favorable/desfavorable y construyan cuatro mundos posibles.</p>
-  <div class="grid">
-    <div><label>Eje X</label><input id="axisX" placeholder="Ej. apertura comercial ↔ fragmentación"></div>
-    <div><label>Eje Y</label><input id="axisY" placeholder="Ej. alta resiliencia ↔ alta vulnerabilidad"></div>
-  </div>
-  <label>¿Por qué estos dos ejes son críticos, inciertos e independientes?</label>
-  <textarea id="axesWhy" placeholder="Máximo 4–5 líneas."></textarea>
-  <h3>Banco de incertidumbres</h3>
+  <p>Partan de las tendencias de alto impacto y alta incertidumbre. Elijan dos incertidumbres críticas e independientes, definan sus polos y construyan cuatro mundos plausibles.</p>
+  <div id="candidateBox" class="notice"><b>Candidatas detectadas:</b> aún no hay variables marcadas automáticamente.</div>
+  <h3>Banco de incertidumbres del sector</h3>
   <span class="tag" style="display:inline-block;margin:3px">Fragmentación tecnológica entre bloques</span>
 <span class="tag" style="display:inline-block;margin:3px">Acceso a incentivos públicos</span>
 <span class="tag" style="display:inline-block;margin:3px">Disponibilidad de energía limpia</span>
 <span class="tag" style="display:inline-block;margin:3px">Disponibilidad hídrica</span>
 <span class="tag" style="display:inline-block;margin:3px">Demanda global de chips</span>
 <span class="tag" style="display:inline-block;margin:3px">Restricciones de exportación tecnológica</span>
+  <div class="grid">
+    <div><label>Eje X</label><input id="axisX" placeholder="Ej. apertura comercial ↔ fragmentación"></div>
+    <div><label>Eje Y</label><input id="axisY" placeholder="Ej. alta resiliencia ↔ alta vulnerabilidad"></div>
+  </div>
+  <label>¿Por qué estos dos ejes son críticos, inciertos e independientes?</label>
+  <textarea id="axesWhy" placeholder="Máximo 4–5 líneas."></textarea>
   <div class="matrix">
     <div class="quad"><div class="combo">Escenario 1 = X favorable + Y favorable</div><label>Nombre</label><input id="s1n"><label>Narrativa</label><textarea id="s1" placeholder="¿Qué ocurre y qué implica para Costa Rica?"></textarea></div>
     <div class="quad"><div class="combo">Escenario 2 = X desfavorable + Y favorable</div><label>Nombre</label><input id="s2n"><label>Narrativa</label><textarea id="s2" placeholder="¿Qué ocurre y qué implica para Costa Rica?"></textarea></div>
@@ -111,20 +128,19 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
 </div>
 
 <div class="card">
-  <div class="step">Paso 4 · 20 minutos</div>
+  <div class="step">Paso 5 · 15 minutos</div>
   <h2>Decisión robusta y señales</h2>
-  <label>Diagnóstico central</label><textarea id="diag" placeholder="¿Qué está pasando realmente en este sector?"></textarea>
-  <label>Política orientadora</label><textarea id="policy" placeholder="¿Qué enfoque debería seguir una empresa del sector o el equipo país?"></textarea>
-  <label>Tres acciones coherentes</label><textarea id="actions" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea>
+  <label>Política orientadora</label><textarea id="policy" placeholder="¿Qué enfoque debería seguir una empresa del sector o el equipo país ante varios escenarios?"></textarea>
+  <label>Tres acciones coherentes / jugadas sin arrepentimiento</label><textarea id="actions" placeholder="1. ...&#10;2. ...&#10;3. ..."></textarea>
   <div class="grid">
     <div>
       <label>Señal de alerta 1</label><input id="signal1" placeholder="Indicador">
-      <label>Fuente posible</label><input id="source1" placeholder="Ej. COMEX, PROCOMER, empresa, cámara">
+      <label>Fuente posible</label><input id="source1" placeholder="Ej. COMEX, PROCOMER, BCCR, empresa, cámara">
       <label>Umbral</label><input id="threshold1" placeholder="Ej. >10 %, >30 días, etc.">
     </div>
     <div>
       <label>Señal de alerta 2</label><input id="signal2" placeholder="Indicador">
-      <label>Fuente posible</label><input id="source2" placeholder="Ej. BCCR, ICT, empresa, organismo internacional">
+      <label>Fuente posible</label><input id="source2" placeholder="Ej. organismo internacional, empresa, cámara">
       <label>Umbral</label><input id="threshold2" placeholder="Ej. caída >15 %, costo +20 %, etc.">
     </div>
   </div>
@@ -142,26 +158,15 @@ table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--line);pa
   <button class="secondary" onclick="window.print()">Imprimir / PDF</button>
   <div id="report" class="notice" style="margin-top:14px">Complete la actividad y pulse “Generar informe”.</div>
 </div>
-
 </main>
+
 <div id="status">Guardado local</div>
 
 <script>
 const TEAM=2;
 const SECTOR="Semiconductores";
-const STORAGE_KEY='xp0250_equipo_2_semiconductores';
+const STORAGE_KEY='xp0250_equipo_2_semiconductores_v3';
 const forcesNames=['Amenaza de nuevos entrantes','Poder de proveedores','Poder de compradores','Amenaza de sustitutos','Rivalidad entre competidores'];
-
-function renderForces(){
-  document.getElementById('forces').innerHTML=forcesNames.map((f,i)=>`
-  <div class="evidence">
-    <label>${f}</label>
-    <div class="grid">
-      <select id="fl${i}"><option value="">Nivel...</option><option>Baja</option><option>Media</option><option>Alta</option></select>
-      <textarea id="fr${i}" placeholder="Argumento breve + evidencia pertinente o inferencia razonada"></textarea>
-    </div>
-  </div>`).join('');
-}
 
 const pestelVars=[
   ['Aranceles / política comercial','Político'],
@@ -176,18 +181,60 @@ const pestelVars=[
 
 function renderPestel(){
   document.getElementById('pestel').innerHTML=pestelVars.map((r,i)=>`
-  <tr><td><input id="pv${i}" value="${r[0]}"></td><td><select id="pc${i}">
-  ${['Político','Económico','Social','Tecnológico','Ambiental','Legal'].map(x=>`<option ${x===r[1]?'selected':''}>${x}</option>`).join('')}
-  </select></td><td><input id="pi${i}" type="number" min="1" max="5"></td><td style="text-align:center"><input id="ps${i}" type="checkbox"></td></tr>`).join('');
+  <tr>
+    <td><input id="pv${i}" value="${r[0]}"></td>
+    <td><select id="pc${i}">${['Político','Económico','Social','Tecnológico','Ambiental','Legal'].map(x=>`<option ${x===r[1]?'selected':''}>${x}</option>`).join('')}</select></td>
+    <td><select id="pi${i}" onchange="updatePestelScores()"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+    <td><select id="pp${i}" onchange="updatePestelScores()"><option value="">—</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td>
+    <td id="score${i}" class="score">—</td>
+    <td style="text-align:center"><input id="ps${i}" type="checkbox"></td>
+    <td id="cand${i}">—</td>
+  </tr>`).join('');
+}
+
+function updatePestelScores(){
+  let candidates=[];
+  for(let i=0;i<8;i++){
+    const impact=Number(document.getElementById('pi'+i).value||0);
+    const prob=Number(document.getElementById('pp'+i).value||0);
+    const score=(impact&&prob)?impact*prob:0;
+    document.getElementById('score'+i).textContent=score||'—';
+    const cand=(impact===3 && prob===1);
+    document.getElementById('cand'+i).innerHTML=cand?'<span class="candidate">★ Candidata</span>':'—';
+    if(cand)candidates.push(document.getElementById('pv'+i).value);
+  }
+  document.getElementById('candidateBox').innerHTML='<b>Candidatas detectadas:</b> '+(candidates.length?candidates.join(' · '):'ninguna todavía. Recuerden que una incertidumbre crítica también puede surgir del juicio del equipo.');
+}
+
+function renderForces(){
+  document.getElementById('forces').innerHTML=forcesNames.map((f,i)=>`
+  <div class="evidence">
+    <label>${f}</label>
+    <div class="grid">
+      <select id="fl${i}"><option value="">Nivel...</option><option>Baja</option><option>Media</option><option>Alta</option></select>
+      <textarea id="fr${i}" placeholder="Argumento breve + evidencia pertinente o inferencia razonada"></textarea>
+    </div>
+  </div>`).join('');
 }
 
 function collect(){
-  const d={team:TEAM,sector:SECTOR,forces:[],pestel:[],structDiag:structDiag.value,pestelJust:[p1.value,p2.value,p3.value],axes:{},scenarios:[],decision:{},savedAt:new Date().toISOString()};
+  const d={team:TEAM,sector:SECTOR,pestel:[],forces:[],pestelJust:[p1.value,p2.value,p3.value],
+    pestelBridge:pestelBridge.value,porterSynth:porterSynth.value,integratedDiag:integratedDiag.value,oa:oa.value,
+    axes:{x:axisX.value,y:axisY.value,why:axesWhy.value},scenarios:[],decision:{},savedAt:new Date().toISOString()};
+
+  for(let i=0;i<8;i++)d.pestel.push({
+    variable:document.getElementById('pv'+i).value,
+    category:document.getElementById('pc'+i).value,
+    impact:document.getElementById('pi'+i).value,
+    probability:document.getElementById('pp'+i).value,
+    score:(Number(document.getElementById('pi'+i).value||0)*Number(document.getElementById('pp'+i).value||0))||'',
+    selected:document.getElementById('ps'+i).checked,
+    candidate:(Number(document.getElementById('pi'+i).value||0)===3 && Number(document.getElementById('pp'+i).value||0)===1)
+  });
+
   for(let i=0;i<5;i++)d.forces.push({name:forcesNames[i],level:document.getElementById('fl'+i).value,reason:document.getElementById('fr'+i).value});
-  for(let i=0;i<8;i++)d.pestel.push({variable:document.getElementById('pv'+i).value,category:document.getElementById('pc'+i).value,impact:document.getElementById('pi'+i).value,selected:document.getElementById('ps'+i).checked});
-  d.axes={x:axisX.value,y:axisY.value,why:axesWhy.value};
   for(let i=1;i<=4;i++)d.scenarios.push({name:document.getElementById('s'+i+'n').value,text:document.getElementById('s'+i).value});
-  d.decision={diag:diag.value,policy:policy.value,actions:actions.value,
+  d.decision={policy:policy.value,actions:actions.value,
     signal1:signal1.value,source1:source1.value,threshold1:threshold1.value,
     signal2:signal2.value,source2:source2.value,threshold2:threshold2.value};
   return d;
@@ -200,15 +247,23 @@ function saveNow(){
 
 function restore(d){
   if(!d||d.team!==TEAM)return;
-  (d.forces||[]).forEach((v,i)=>{if(i<5){document.getElementById('fl'+i).value=v.level||'';document.getElementById('fr'+i).value=v.reason||'';}});
-  structDiag.value=d.structDiag||'';
-  (d.pestel||[]).forEach((v,i)=>{if(i<8){document.getElementById('pv'+i).value=v.variable||'';document.getElementById('pc'+i).value=v.category||'Político';document.getElementById('pi'+i).value=v.impact||'';document.getElementById('ps'+i).checked=!!v.selected;}});
+  (d.pestel||[]).forEach((v,i)=>{if(i<8){
+    document.getElementById('pv'+i).value=v.variable||'';
+    document.getElementById('pc'+i).value=v.category||'Político';
+    document.getElementById('pi'+i).value=v.impact||'';
+    document.getElementById('pp'+i).value=v.probability||'';
+    document.getElementById('ps'+i).checked=!!v.selected;
+  }});
   p1.value=d.pestelJust?.[0]||''; p2.value=d.pestelJust?.[1]||''; p3.value=d.pestelJust?.[2]||'';
+  pestelBridge.value=d.pestelBridge||'';
+  (d.forces||[]).forEach((v,i)=>{if(i<5){document.getElementById('fl'+i).value=v.level||'';document.getElementById('fr'+i).value=v.reason||'';}});
+  porterSynth.value=d.porterSynth||''; integratedDiag.value=d.integratedDiag||''; oa.value=d.oa||'';
   axisX.value=d.axes?.x||''; axisY.value=d.axes?.y||''; axesWhy.value=d.axes?.why||'';
   (d.scenarios||[]).forEach((v,i)=>{let n=i+1;if(n<=4){document.getElementById('s'+n+'n').value=v.name||'';document.getElementById('s'+n).value=v.text||'';}});
-  diag.value=d.decision?.diag||''; policy.value=d.decision?.policy||''; actions.value=d.decision?.actions||'';
+  policy.value=d.decision?.policy||''; actions.value=d.decision?.actions||'';
   signal1.value=d.decision?.signal1||''; source1.value=d.decision?.source1||''; threshold1.value=d.decision?.threshold1||'';
   signal2.value=d.decision?.signal2||''; source2.value=d.decision?.source2||''; threshold2.value=d.decision?.threshold2||'';
+  updatePestelScores();
 }
 
 function downloadBackup(){
@@ -226,25 +281,36 @@ document.getElementById('importFile').addEventListener('change',async e=>{
 
 function buildReport(){
   const d=collect();
-  const top=d.pestel.filter(x=>x.selected);
+  const shortList=d.pestel.filter(x=>x.selected);
+  const candidates=d.pestel.filter(x=>x.candidate);
+
   let t=`<b>Equipo ${TEAM} · ${SECTOR}</b><br><br>`;
-  t+=`<b>1. Cinco Fuerzas</b><br>`+d.forces.map(x=>`• ${x.name}: ${x.level||'—'} — ${x.reason||'—'}`).join('<br>');
-  t+=`<br><b>Diagnóstico estructural:</b> ${d.structDiag||'—'}`;
-  t+=`<br><br><b>2. PESTEL priorizado</b><br>`+(top.length?top.map(x=>`• ${x.category}: ${x.variable} (impacto ${x.impact||'—'})`).join('<br>'):'Aún no se seleccionaron variables.');
+  t+=`<b>1. PESTEL priorizado</b><br>`+(shortList.length?shortList.map(x=>`• ${x.category}: ${x.variable} | I=${x.impact||'—'} P=${x.probability||'—'} I×P=${x.score||'—'}`).join('<br>'):'Aún no se seleccionó la lista corta.');
   t+=`<br><b>Justificaciones Top 3:</b><br>`+d.pestelJust.map((x,i)=>`${i+1}. ${x||'—'}`).join('<br>');
-  t+=`<br><br><b>3. Ejes</b><br>X: ${d.axes.x||'—'}<br>Y: ${d.axes.y||'—'}<br>${d.axes.why||''}`;
-  t+=`<br><br><b>4. Escenarios 2030</b><br>`+d.scenarios.map((x,i)=>`• Escenario ${i+1} — ${x.name||'Sin nombre'}: ${x.text||'—'}`).join('<br>');
-  t+=`<br><br><b>5. Decisión robusta</b><br><b>Diagnóstico:</b> ${d.decision.diag||'—'}<br><b>Política:</b> ${d.decision.policy||'—'}<br><b>Acciones:</b><br>${(d.decision.actions||'—').replaceAll('\\n','<br>')}`;
+  t+=`<br><b>Puente a la industria:</b> ${d.pestelBridge||'—'}`;
+  t+=`<br><b>Candidatas automáticas a escenarios:</b> ${candidates.length?candidates.map(x=>x.variable).join(', '):'Ninguna'}`;
+
+  t+=`<br><br><b>2. Cinco Fuerzas</b><br>`+d.forces.map(x=>`• ${x.name}: ${x.level||'—'} — ${x.reason||'—'}`).join('<br>');
+  t+=`<br><b>Síntesis de Porter:</b> ${d.porterSynth||'—'}`;
+
+  t+=`<br><br><b>3. Diagnóstico externo integrado</b><br>${d.integratedDiag||'—'}<br><b>Clasificación:</b> ${d.oa||'—'}`;
+
+  t+=`<br><br><b>4. Escenarios 2030</b><br><b>Eje X:</b> ${d.axes.x||'—'}<br><b>Eje Y:</b> ${d.axes.y||'—'}<br>${d.axes.why||''}<br>`;
+  t+=d.scenarios.map((x,i)=>`• Escenario ${i+1} — ${x.name||'Sin nombre'}: ${x.text||'—'}`).join('<br>');
+
+  t+=`<br><br><b>5. Decisión robusta</b><br><b>Política:</b> ${d.decision.policy||'—'}<br><b>Acciones:</b><br>${(d.decision.actions||'—').replaceAll('\\n','<br>')}`;
   t+=`<br><b>Señal 1:</b> ${d.decision.signal1||'—'} | Fuente: ${d.decision.source1||'—'} | Umbral: ${d.decision.threshold1||'—'}`;
   t+=`<br><b>Señal 2:</b> ${d.decision.signal2||'—'} | Fuente: ${d.decision.source2||'—'} | Umbral: ${d.decision.threshold2||'—'}`;
+
   document.getElementById('report').innerHTML=t;
   saveNow();
 }
 
 document.addEventListener('input',saveNow);
-document.addEventListener('change',saveNow);
-renderForces();renderPestel();
-try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); if(d)restore(d);}catch(e){}
+document.addEventListener('change',()=>{updatePestelScores();saveNow();});
+renderPestel();
+renderForces();
+try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); if(d)restore(d); else updatePestelScores();}catch(e){updatePestelScores();}
 </script>
 </body>
 </html>
