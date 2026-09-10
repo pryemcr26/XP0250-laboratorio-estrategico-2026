@@ -156,6 +156,43 @@
       font-size:14px;
       line-height:1.45;
     }
+
+    .resource-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:12px;
+      margin-top:16px;
+    }
+    .resource-card{
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px;
+    }
+    .resource-card strong{
+      display:block;
+      color:var(--ucr-blue);
+      margin-bottom:6px;
+    }
+    .resource-card p{
+      margin:0 0 10px;
+      min-height:auto;
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+    .download-btn{
+      display:inline-block;
+      text-decoration:none;
+      background:var(--ucr-blue);
+      color:#fff;
+      padding:9px 12px;
+      border-radius:8px;
+      font-size:14px;
+      font-weight:700;
+    }
+    .download-btn:hover{background:#004b84}
+
     footer{
       margin-top:24px;
       color:var(--muted);
@@ -250,9 +287,28 @@
         </div>
       </div>
 
+      <h3 style="margin:20px 0 8px;color:var(--ucr-blue)">Recursos para trabajar el simulador</h3>
+      <p style="margin-top:0">
+        Descargue estos dos documentos antes de iniciar la actividad. La guía explica cómo completar cada etapa y la plantilla permite conservar un respaldo editable del trabajo del equipo.
+      </p>
+
+      <div class="resource-grid">
+        <div class="resource-card">
+          <strong>Guía pedagógica del simulador</strong>
+          <p>Orientaciones, ejemplos y criterios para completar PESTEL, Cinco Fuerzas, diagnóstico, escenarios y decisión estratégica.</p>
+          <a class="download-btn" href="recursos/guia-pedagogica-simulador-macroentorno.docx" download>Descargar guía</a>
+        </div>
+
+        <div class="resource-card">
+          <strong>Plantilla editable de respaldo</strong>
+          <p>Documento Word para copiar las respuestas principales del equipo y no depender únicamente del almacenamiento del navegador.</p>
+          <a class="download-btn" href="recursos/plantilla-respaldo-simulador-macroentorno.docx" download>Descargar plantilla</a>
+        </div>
+      </div>
+
       <div class="note">
         <strong>Importante:</strong> el simulador guarda el avance en el navegador de la persona relatora.
-        Descargue también el respaldo JSON y utilice el documento Word de respaldo del equipo.
+        Use también la plantilla Word de respaldo y descargue el archivo JSON antes de cerrar la actividad.
       </div>
     </section>
 
